@@ -5,7 +5,7 @@ const lessExtension = /\.less$/;
 const lessModuleExtension = /\.module.less$/;
 
 function createRewireLess(lessLoaderOptions = {}) {
-  return function(config, env) {
+  return function (config, env) {
     // Exclude all less files (including module files) from file-loader
     const fileLoader = getLoader(config.module.rules, rule => {
       return loaderNameMatches(rule, "file-loader") && rule.exclude;
@@ -49,7 +49,10 @@ function createRewireLess(lessLoaderOptions = {}) {
       // Get a copy of the CSS module loader
       getLoader(
         config.module.rules,
-        rule => String(rule.test) === String(/\.module\.css$/),
+        rule =>
+          String(rule.test) === String(/\.module\.css$/) ||
+          (String(rule.test) === String(/\.css$/) &&
+            String(rule.exclude) !== String(/\.module\.css$/)),
       ),
     );
 
